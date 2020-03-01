@@ -1,0 +1,7 @@
+{
+  "name": "ticker-tracker",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
