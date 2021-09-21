@@ -42,4 +42,5 @@ jobs:
           echo New Release [${{ steps.tag_version.outputs.new_tag }}]
           echo Change Log
           echo ----------
-          echo [${{ steps.tag_version.outputs.changelog }}]
+          echo ${{ steps.tag_version.outputs.changelog }}
+          echo Finished.
