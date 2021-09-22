@@ -42,36 +42,39 @@ jobs:
           echo "github.sha ${{ github.sha }}"
           echo "github.workflow ${{ github.workflow }}"
 
-      # Ger previous tag
-      - name: Get previous tag
-        id: previoustag
-        uses: actions-ecosystem/action-get-latest-tag@v1
-        with:
-          semver_only: true
+      - name: Bump version and push tag
+        id: bump
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          RELEASE_BRANCHES: main,^(?:releases\/)?[0-9]+\.[0-9]+\.x
+          DRY_RUN: true
+          TAG_CONTEXT: branch
+          VERBOSE: true
 
       # Bump version
-      #      - name: Bump Version
-      #        id: tag_version
-      #        uses: zwaldowski/semver-release-action@v1
-      #        with:
-      #          github_token: ${{ secrets.GITHUB_TOKEN }}
-      #          bump: ${{ github.event.inputs.release-type }}
-      #          dry_run: true
+#      - name: Bump Version
+#        id: tag_version
+#        uses: zwaldowski/semver-release-action@v1
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          bump: ${{ github.event.inputs.release-type }}
+#          dry_run: true
 
       # Get next sem version
-      - name: Get next minor version
-        id: semvers
-        uses: "WyriHaximus/github-action-next-semvers@v1"
-        with:
-          version: ${{ steps.previoustag.outputs.tag }}
+#      - name: Get next minor version
+#        id: semvers
+#        uses: "WyriHaximus/github-action-next-semvers@v1"
+#        with:
+#          version: ${{ steps.previoustag.outputs.tag }}
 
       # Print version
       - name: Print Version
         run: |
-          echo "Previous Tag: ${{ steps.previoustag.outputs.tag }}"
-          echo "Sem Version major: ${{ steps.semvers.outputs.major }}"
-          echo "Sem Version minor: ${{ steps.semvers.outputs.minor }}"
-          echo "Sem Version patch: ${{ steps.semvers.outputs.patch }}"
+          echo "Previous Tag: ${{ steps.bump.outputs.new_tag }}"
+          echo "Sem Version major: ${{ steps.bump.outputs.tag }}"
+          echo "Sem Version minor: ${{ steps.bump.outputs.part }}"
 
 #      - name: Create a GitHub release
 #        uses: ncipollo/release-action@v1
