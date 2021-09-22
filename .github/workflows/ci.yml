@@ -44,7 +44,7 @@ jobs:
 
       # Ger previous tag
       - name: Get previous tag
-        id: get-latest-tag
+        id: previoustag
         uses: actions-ecosystem/action-get-latest-tag@v1
         with:
           semver_only: true
@@ -63,7 +63,7 @@ jobs:
         id: semvers
         uses: "WyriHaximus/github-action-next-semvers@v1"
         with:
-          version: ${{ steps.get-latest-tag.outputs.tag }}
+          version: ${{ steps.previoustag.outputs.tag }}
 
       # Print version
       - name: Print Version
