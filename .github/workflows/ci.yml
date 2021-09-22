@@ -42,18 +42,40 @@ jobs:
           echo "github.sha ${{ github.sha }}"
           echo "github.workflow ${{ github.workflow }}"
 
+      # Ger previous tag
+      - name: Get previous tag
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
+
       # Bump version
-      - name: Bump Version
-        id: tag_version
-        uses: zwaldowski/semver-release-action@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          bump: ${{ github.event.inputs.release-type }}
-          dry_run: true
-      
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+#      - name: Bump Version
+#        id: tag_version
+#        uses: zwaldowski/semver-release-action@v1
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          bump: ${{ github.event.inputs.release-type }}
+#          dry_run: true
+
+      # Get next sem version
+      - name: 'Get next minor version'
+          id: semvers
+          uses: "WyriHaximus/github-action-next-semvers@v1"
+          with:
+            version: ${{ steps.previoustag.outputs.tag }}
+
+      # Print version
+      - name: 'Print Version'
+          run: |
+            echo "Previous Tag: ${{ steps.previoustag.outputs.tag }}
+            echo "Sem Version major: ${{ steps.semvr.outputs.major }}
+            echo "Sem Version minor: ${{ steps.semvr.outputs.minor }}
+            echo "Sem Version patch: ${{ steps.semvr.outputs.patch }}
+
+#      - name: Create a GitHub release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          tag: ${{ steps.tag_version.outputs.new_tag }}
+#          name: Release ${{ steps.tag_version.outputs.new_tag }}
+#          body: ${{ steps.tag_version.outputs.changelog }}
