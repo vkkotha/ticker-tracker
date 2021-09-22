@@ -34,8 +34,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          echo "GITHUB_REF ${{ GITHUB_REF }}"
-          echo "GITHUB_REF ${{ GITHUB_SHA }}"
+          echo "GITHUB_REF ${{ $GITHUB_REF }}"
+          echo "GITHUB_REF ${{ $GITHUB_SHA }}"
           echo "github.head_ref[PR Source] ${{ github.head_ref }}"
           echo "github.base_ref[PR Target] ${{ github.base_ref }}"
           echo "github.ref ${{ github.ref }}"
