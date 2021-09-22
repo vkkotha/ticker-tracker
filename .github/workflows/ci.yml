@@ -18,6 +18,7 @@ on:
         required: true
         default: 'patch'
 
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -34,25 +35,47 @@ jobs:
       - name: Run a one-line script
         run: |
           echo "GITHUB_REF: $GITHUB_REF"
-          echo "GITHUB_REF: $GITHUB_SHA"
+          echo "GITHUB_SHA: $GITHUB_SHA"
           echo "github.head_ref[PR Source] ${{ github.head_ref }}"
           echo "github.base_ref[PR Target] ${{ github.base_ref }}"
           echo "github.ref ${{ github.ref }}"
           echo "github.sha ${{ github.sha }}"
           echo "github.workflow ${{ github.workflow }}"
 
-      # Bump version
-      - name: Bump Version
-        id: tag_version
-        uses: zwaldowski/semver-release-action@v1
+      # Ger previous tag
+      - name: Get previous tag
+        id: previoustag
+        uses: actions-ecosystem/action-get-latest-tag@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          bump: ${{ github.event.inputs.release-type }}
-          dry_run: true
+          semver_only: true
 
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
+      # Bump version
+      #      - name: Bump Version
+      #        id: tag_version
+      #        uses: zwaldowski/semver-release-action@v1
+      #        with:
+      #          github_token: ${{ secrets.GITHUB_TOKEN }}
+      #          bump: ${{ github.event.inputs.release-type }}
+      #          dry_run: true
+
+      # Get next sem version
+      - name: Get next minor version
+        id: semvers
+        uses: "WyriHaximus/github-action-next-semvers@v1"
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+          version: ${{ steps.previoustag.outputs.tag }}
+
+      # Print version
+      - name: Print Version
+        run: |
+          echo "Previous Tag: ${{ steps.previoustag.outputs.tag }}"
+          echo "Sem Version major: ${{ steps.semvers.outputs.major }}"
+          echo "Sem Version minor: ${{ steps.semvers.outputs.minor }}"
+          echo "Sem Version patch: ${{ steps.semvers.outputs.patch }}"
+
+#      - name: Create a GitHub release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          tag: ${{ steps.tag_version.outputs.new_tag }}
+#          name: Release ${{ steps.tag_version.outputs.new_tag }}
+#          body: ${{ steps.tag_version.outputs.changelog }}
