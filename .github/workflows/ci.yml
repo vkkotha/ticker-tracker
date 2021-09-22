@@ -27,7 +27,12 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: |
+          echo "github.head_ref[PR Source] ${{ github.head_ref }}"
+          echo "github.base_ref[PR Target] ${{ github.base_ref }}"
+          echo "github.ref ${{ github.ref }}"
+          echo "github.sha ${{ github.sha }}"
+          echo "github.workflow ${{ github.workflow }}"
 
       # Bump version
       - name: Bump Version
