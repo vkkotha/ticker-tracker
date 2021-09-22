@@ -66,12 +66,12 @@ jobs:
           version: ${{ steps.previoustag.outputs.tag }}
 
       # Print version
-      - name: 'Print Version'
-          run: |
-            echo "Previous Tag: ${{ steps.previoustag.outputs.tag }}
-            echo "Sem Version major: ${{ steps.semvr.outputs.major }}
-            echo "Sem Version minor: ${{ steps.semvr.outputs.minor }}
-            echo "Sem Version patch: ${{ steps.semvr.outputs.patch }}
+      - name: Print Version
+        run: |
+          echo "Previous Tag: ${{ steps.previoustag.outputs.tag }}
+          echo "Sem Version major: ${{ steps.semvr.outputs.major }}
+          echo "Sem Version minor: ${{ steps.semvr.outputs.minor }}
+          echo "Sem Version patch: ${{ steps.semvr.outputs.patch }}
 
 #      - name: Create a GitHub release
 #        uses: ncipollo/release-action@v1
