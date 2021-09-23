@@ -53,7 +53,8 @@ jobs:
           RELEASE_BRANCHES: main,^(releases\/)?[0-9]+\.[0-9]+\.x$
           DRY_RUN: true
           TAG_CONTEXT: branch
-          BUMP_STRATEGY: angular
+          BUMP_STRATEGY: skip
+          DEFAULT_BUMP: none
           VERBOSE: true
 
       # Bump version
@@ -75,9 +76,9 @@ jobs:
       # Print version
       - name: Print Version
         run: |
-          echo "Previous Tag: ${{ steps.bump.outputs.new_tag }}"
-          echo "Sem Version major: ${{ steps.bump.outputs.tag }}"
-          echo "Sem Version minor: ${{ steps.bump.outputs.part }}"
+          echo "New Tag: ${{ steps.bump.outputs.new_tag }}"
+          echo "Previous tag: ${{ steps.bump.outputs.tag }}"
+          echo "Bump Type: ${{ steps.bump.outputs.part }}"
 
 #      - name: Create a GitHub release
 #        uses: ncipollo/release-action@v1
