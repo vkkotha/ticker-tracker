@@ -46,13 +46,15 @@ jobs:
 
       - name: Bump version and push tag
         id: bump
-        uses: anothrNick/github-tag-action@1.36.0
+        uses: vkkotha/github-tag-action@1.37.0-beta.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           RELEASE_BRANCHES: main,^(releases\/)?[0-9]+\.[0-9]+\.x$
           DRY_RUN: true
           TAG_CONTEXT: branch
+          BUMP_STRATEGY: skip
+          DEFAULT_BUMP: none
           VERBOSE: true
 
       # Bump version
@@ -74,9 +76,9 @@ jobs:
       # Print version
       - name: Print Version
         run: |
-          echo "Previous Tag: ${{ steps.bump.outputs.new_tag }}"
-          echo "Sem Version major: ${{ steps.bump.outputs.tag }}"
-          echo "Sem Version minor: ${{ steps.bump.outputs.part }}"
+          echo "New Tag: ${{ steps.bump.outputs.new_tag }}"
+          echo "Previous tag: ${{ steps.bump.outputs.tag }}"
+          echo "Bump Type: ${{ steps.bump.outputs.part }}"
 
 #      - name: Create a GitHub release
 #        uses: ncipollo/release-action@v1
